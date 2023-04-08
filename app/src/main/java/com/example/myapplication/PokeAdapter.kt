@@ -4,12 +4,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.bumptech.glide.Glide
 
-class PokeAdapter(private val pokeList: List<String>) : RecyclerView.Adapter<ViewHolder>(){
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.poke_item, parent)
+class PokeAdapter(val pokeList: MutableList<Pokemon>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.poke_item, parent, false)
         return ViewHolder(view)
     }
 
@@ -17,15 +18,21 @@ class PokeAdapter(private val pokeList: List<String>) : RecyclerView.Adapter<Vie
         return pokeList.size
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        TODO("Not yet implemented")
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val pokemon = pokeList[position]
+        val viewHolder = holder as ViewHolder
+        viewHolder.pokeName.text = pokemon.name
+        viewHolder.pokeType.text = pokemon.type
+        viewHolder.pokeLoc.text = pokemon.height
+        Glide.with(viewHolder.itemView.context)
+            .load(pokemon.imageUrl)
+            .into(viewHolder.pokeImage)
     }
-}
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val pokeImage: ImageView = itemView.findViewById(R.id.poke_image)
+        val pokeName: TextView = itemView.findViewById(R.id.poke_name)
+        val pokeType: TextView = itemView.findViewById(R.id.poke_type)
+        val pokeLoc: TextView = itemView.findViewById(R.id.poke_height)
+    }
 
-class ViewHolder(view: View) : ViewHolder(view) {
-        private val pokeImg: ImageView
-
-        init {
-            pokeImg = view.findViewById(R.id.poke_Img)
-        }
 }
